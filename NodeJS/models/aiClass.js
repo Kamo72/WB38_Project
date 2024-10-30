@@ -1,6 +1,6 @@
 //aiClass.js
 
-require("dotenv").config({ path: "C:/Project/WB38_Project/NodeJS/.env" });
+require("dotenv").config({ path: "S:/Project/24 해커톤 부활의식/ProjectFiles/WB38_Project/.env" });
 const mysql = require("mysql");
 const fs = require("fs").promises;
 const util = require("util");
@@ -25,6 +25,8 @@ class AI {
   }
 
   getUserHistory(username, callback) {
+    console.log(
+      "SELECT * FROM userHistory where username = " + username)
     this.db.query(
       "SELECT * FROM userHistory where username = ?",
       [username],

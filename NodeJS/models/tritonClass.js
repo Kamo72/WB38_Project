@@ -12,6 +12,8 @@ class Triton {
   async TritonRequest(imageData, petbreed, api, callback) {
     //triton server로 request
     try {
+      console.log("petbreed : " + petbreed)
+      console.log("api : " + api)
       const modelsArray = await ModelSelect(petbreed, api);
       const processedImageData = await preprocessImageData(
         imageData,

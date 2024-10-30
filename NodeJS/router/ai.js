@@ -27,7 +27,7 @@ router.post("", function (req, res) {
   console.log("히스토리 요청 : " + req.body.user);
 
   aiModule.getUserHistory(req.body.user, function (error, images, results) {
-    if (error) return res.status(401).json({ error: "History 검색 오류" });
+    if (error) return res.status(401).json({ error: "History 검색 오류 : " + error.message });
     if (results.length == 0)
       return res.status(200).json({ message: "no data" });
 
@@ -57,6 +57,7 @@ router.post("", function (req, res) {
 });
 
 router.post("/upload", upload.single("file"), async function (req, res) {
+  
   if (!req.body.username) res.status(401).json({ error: "잘못된 접근" });
   console.log("file upload Request : " + req.body.username);
 
@@ -113,6 +114,15 @@ router.post("/upload", upload.single("file"), async function (req, res) {
               result: [],
             };
 
+            var isAbnormal = false;
+            var highestPvalue = 0;
+
+            parseResult.forEach((data) => {
+              if(data.diseaseid != undefined){
+                isAbnormal = true;
+              }
+            })
+            
             parseResult.forEach((data) => {
               let result = {
                 diseaseid: data.diseaseid,
@@ -120,11 +130,35 @@ router.post("/upload", upload.single("file"), async function (req, res) {
                 improvement: data.improvement,
                 petname: req.body.petname,
               };
-              totalResults.result.push(result);
+              
+              if(highestPvalue > data.improvement)
+                {
+                  console.log("result not enought pvalue! : " + result.diseaseid + "/"+ result.possibility + "/"+ result.improvement + "/"+ result.petname + "/")
+                  return;
+                }
+                highestPvalue = data.improvement
+
+
+              if(isAbnormal)
+              {
+                if(data.diseaseid == undefined)
+                {
+                  console.log("result aborted! : " + result.diseaseid + "/"+ result.possibility + "/"+ result.improvement + "/"+ result.petname + "/")
+                  return;
+                }
+              }
+              
+              if(totalResults.length != 0)
+              {
+                totalResults.result.pop();
+              }
+
+                totalResults.result.push(result);
+                console.log("result : " + result.diseaseid + "/"+ result.possibility + "/"+ result.improvement + "/"+ result.petname + "/")
             });
 
             console.log(
-              req.body.username + "의 요청의 결과 : " + parseResult[0].diseaseid
+              req.body.username + "의 요청의 결과 : " + totalResults.result[0].diseaseid
             );
             res.status(200).json(totalResults);
             resolve();
@@ -132,9 +166,11 @@ router.post("/upload", upload.single("file"), async function (req, res) {
         }
       );
     });
+    
   } catch (e) {
     console.error(e);
   }
+
 });
 
 router.post("/delete", async function (req, res) {

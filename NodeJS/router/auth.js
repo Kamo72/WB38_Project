@@ -97,6 +97,7 @@ router.post("/register_process", function (req, res) {
         "local",
         function (error, result) {
           if (error || !result) {
+            console.log("회원가입 오류 : " + error + "\n result : " + result )
             return res.status(401).json({ error: "회원가입 오류" });
           } else {
             return res.status(200).json({ message: result });
@@ -105,12 +106,15 @@ router.post("/register_process", function (req, res) {
       );
     } else if (password !== password2) {
       // 잘못된 패스워드 입력
+      console.log("잘못된 pw" )
       return res.status(401).json({ error: "잘못된 pw" });
     } else {
       // 이미 존재하는 id
+      console.log("이미 존재하는 id" )
       return res.status(401).json({ error: "이미 존재하는 id" });
     }
   } else {
+    console.log("입력 확인" )
     return res.status(401).json({ error: "입력 확인" });
   }
 });

@@ -1,6 +1,6 @@
 //Main.js
 
-require("dotenv").config({ path: "C:/Project/WB38_Project/NodeJS/.env" });
+require("dotenv").config({ path: "S:/Project/24 해커톤 부활의식/ProjectFiles/WB38_Project/.env" });
 
 const fs = require("fs");
 const http = require("http");
@@ -27,8 +27,8 @@ const bodyParser = require("body-parser");
 const passport = require("passport");
 const passportConfig = require("./passport/index.js");
 const LocalStrategy = require("./passport/localStrategy.js");
-const KakaoStrategy = require("./passport/kakaoStrategy.js");
-const NaverStrategy = require("./passport/naverStrategy.js");
+// const KakaoStrategy = require("./passport/kakaoStrategy.js");
+// const NaverStrategy = require("./passport/naverStrategy.js");
 
 const authRouter = require("./router/auth.js");
 const aiRouter = require("./router/ai.js");
@@ -65,8 +65,8 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 LocalStrategy();
-KakaoStrategy();
-NaverStrategy();
+// KakaoStrategy();
+// NaverStrategy();
 passportConfig();
 
 app.use("/auth", authRouter); // 인증 라우터

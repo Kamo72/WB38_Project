@@ -1,6 +1,6 @@
 // chatClass.js
 
-require("dotenv").config({ path: "C:/Project/WB38_Project/NodeJS/.env" });
+require("dotenv").config({ path: "S:/Project/24 해커톤 부활의식/ProjectFiles/WB38_Project/.env" });
 const mysql = require("mysql");
 const util = require("util");
 
